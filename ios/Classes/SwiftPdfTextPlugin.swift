@@ -96,21 +96,30 @@ public class SwiftPdfTextPlugin: NSObject, FlutterPlugin {
             Gets the text of the entire document.
             In order to improve the performance, it only retrieves the pages that are currently missing.
      */
-    private func getDocText(result: FlutterResult, path: String,
+    private func getDocText(result: @escaping FlutterResult, path: String,
                             password: String, missingPagesNumbers: [Int]) {
-      let doc = getDoc(result: result, path: path, password: password)
-        if doc == nil {
+        guard let doc = getDoc(result: result, path: path, password: password) else {
+            // Handle document loading failure
+            result(FlutterError(code: "DOC_ERROR", message: "Failed to load document", details: nil))
             return
         }
+
         var missingPagesTexts = [String]()
-        missingPagesNumbers.forEach { (pageNumber) in
-            missingPagesTexts.append(doc!.page(at: pageNumber-1)!.string!)
+
+        for pageNumber in missingPagesNumbers {
+            if let page = doc.page(at: pageNumber - 1), let pageText = page.string {
+                missingPagesTexts.append(pageText)
+            } else {
+                // Handle missing or invalid page
+                missingPagesTexts.append("Page \(pageNumber) is missing or invalid.")
+            }
         }
-        DispatchQueue.main.sync {
+
+        DispatchQueue.main.async {
             result(missingPagesTexts)
         }
     }
-    
+
     /**
            Gets a PDF document, given its path.
     */
