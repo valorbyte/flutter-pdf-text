@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -92,11 +92,11 @@ class _MyAppState extends State<MyApp> {
 
   /// Picks a new PDF document from the device
   Future _pickPDFText() async {
-    var filePickerResult = await FilePicker.platform.pickFiles();
-    if (filePickerResult != null) {
-      _pdfDoc = await PDFDoc.fromPath(filePickerResult.files.single.path!);
-      setState(() {});
-    }
+    // var filePickerResult = await FilePicker.platform.pickFiles();
+    // if (filePickerResult != null) {
+    //   _pdfDoc = await PDFDoc.fromPath(filePickerResult.files.single.path!);
+    //   setState(() {});
+    // }
   }
 
   /// Reads a random page of the document
